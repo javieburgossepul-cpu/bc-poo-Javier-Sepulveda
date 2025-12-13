@@ -3,130 +3,177 @@ import java.util.Date;
 
 public class Venta {
     private int numeroFactura;
-    private Date fechaVenta;
+    private Date fecha;
     private Cliente cliente;
     private ArrayList<Producto> productos;
     private ArrayList<Integer> cantidades;
-    private double totalVenta;
+    private double subtotal;
+    private double descuento;
+    private double total;
     private String metodoPago; // "efectivo", "tarjeta", "transferencia"
+    private boolean facturada;
 
     public Venta(int numeroFactura, Cliente cliente, String metodoPago) {
         this.numeroFactura = numeroFactura;
-        this.fechaVenta = new Date(); // Fecha actual
+        this.fecha = new Date(); // Fecha actual
         this.cliente = cliente;
         this.metodoPago = metodoPago;
         this.productos = new ArrayList<>();
         this.cantidades = new ArrayList<>();
-        this.totalVenta = 0.0;
+        this.subtotal = 0.0;
+        this.descuento = 0.0;
+        this.total = 0.0;
+        this.facturada = false;
     }
 
+    // MÉTODO DE NEGOCIO: Agregar producto a la venta
     public void agregarProducto(Producto producto, int cantidad) {
         if (producto != null && cantidad > 0 && producto.isDisponibleVenta()) {
-            productos.add(producto);
-            cantidades.add(cantidad);
-            actualizarStock(producto, cantidad);
-            calcularTotal();
+            // Verificar stock disponible
+            if (producto.getCantidadStock() >= cantidad) {
+                productos.add(producto);
+                cantidades.add(cantidad);
+                calcularTotales();
 
-            // Registrar compra en historial del cliente
-            cliente.agregarCompra(producto.getNombre() + " x" + cantidad);
+                // Registrar en historial del cliente
+                cliente.agregarCompra(producto.getNombre() + " x" + cantidad + " - Factura #" + numeroFactura);
+
+                System.out.println("Producto agregado: " + producto.getNombre() + " x" + cantidad);
+            } else {
+                System.out.println("Stock insuficiente de " + producto.getNombre() +
+                        ". Stock disponible: " + producto.getCantidadStock());
+            }
         }
     }
 
-    private void actualizarStock(Producto producto, int cantidad) {
-        // Nota: Necesitaríamos un setter para cantidadStock en Producto
-        // Por ahora, solo registramos la venta
-    }
+    // MÉTODO DE NEGOCIO: Calcular totales de la venta
+    private void calcularTotales() {
+        subtotal = 0;
 
-    public void calcularTotal() {
-        totalVenta = 0;
         for (int i = 0; i < productos.size(); i++) {
             Producto producto = productos.get(i);
             int cantidad = cantidades.get(i);
-            totalVenta += producto.getPrecio() * cantidad;
+            subtotal += producto.getPrecio() * cantidad;
         }
 
         // Aplicar descuento si el cliente es frecuente
         if (cliente.isClienteFrecuente()) {
-            totalVenta = cliente.calcularPrecioConDescuento(totalVenta);
+            descuento = subtotal * cliente.getDescuento();
+        } else {
+            descuento = 0.0;
         }
+
+        total = subtotal - descuento;
     }
 
-    public void imprimirFactura() {
-        System.out.println("====================================");
-        System.out.println("      CONSTRUYE FÁCIL - FACTURA     ");
-        System.out.println("====================================");
+    // MÉTODO DE NEGOCIO: Generar factura
+    public void generarFactura() {
+        if (productos.isEmpty()) {
+            System.out.println("No se puede generar factura sin productos.");
+            return;
+        }
+
+        facturada = true;
+        System.out.println("\n" + "=".repeat(50));
+        System.out.println("         CONSTRUYE FÁCIL - FACTURA");
+        System.out.println("=".repeat(50));
         System.out.println("Factura #: " + numeroFactura);
-        System.out.println("Fecha: " + fechaVenta);
+        System.out.println("Fecha: " + fecha);
         System.out.println("Cliente: " + cliente.getNombre());
-        System.out.println("Tipo: " + cliente.getTipoCliente());
-        System.out.println("Teléfono: " + cliente.getTelefono());
+        System.out.println("Documento: " + cliente.getDocumento());
+        System.out.println("Tipo cliente: " + cliente.getTipoCliente());
         System.out.println("Método de pago: " + metodoPago);
-        System.out.println("------------------------------------");
+        System.out.println("-".repeat(50));
+
         System.out.println("PRODUCTOS:");
-
         for (int i = 0; i < productos.size(); i++) {
-            Producto p = productos.get(i);
+            Producto producto = productos.get(i);
             int cantidad = cantidades.get(i);
-            double subtotal = p.getPrecio() * cantidad;
-            System.out.printf("  %-20s %3d x $%7.2f = $%8.2f%n",
-                    p.getNombre(), cantidad, p.getPrecio(), subtotal);
+            double precioUnitario = producto.getPrecio();
+            double totalProducto = precioUnitario * cantidad;
+
+            System.out.printf("  %-25s %3d x $%8.2f = $%9.2f%n",
+                    producto.getNombre(), cantidad, precioUnitario, totalProducto);
         }
 
-        System.out.println("------------------------------------");
+        System.out.println("-".repeat(50));
+        System.out.printf("SUBTOTAL:                    $%9.2f%n", subtotal);
+
         if (cliente.isClienteFrecuente()) {
-            System.out.printf("Descuento (10%%):           -$%8.2f%n",
-                    totalVenta / 0.9 - totalVenta);
+            System.out.printf("DESCUENTO (10%%):           -$%9.2f%n", descuento);
         }
-        System.out.printf("TOTAL A PAGAR:            $%8.2f%n", totalVenta);
-        System.out.println("====================================");
+
+        System.out.printf("TOTAL A PAGAR:              $%9.2f%n", total);
+        System.out.println("=".repeat(50));
     }
 
-    // Getters y Setters
+    // MÉTODO DE NEGOCIO: Mostrar resumen de venta
+    public void mostrarResumen() {
+        System.out.println("=== RESUMEN VENTA #" + numeroFactura + " ===");
+        System.out.println("Cliente: " + cliente.getNombre());
+        System.out.println("Fecha: " + fecha);
+        System.out.println("Total productos: " + productos.size());
+        System.out.println("Subtotal: $" + String.format("%.2f", subtotal));
+        System.out.println("Descuento: $" + String.format("%.2f", descuento));
+        System.out.println("Total: $" + String.format("%.2f", total));
+        System.out.println("Facturada: " + (facturada ? "SÍ" : "NO"));
+    }
+
+    // GETTERS
     public int getNumeroFactura() {
         return numeroFactura;
     }
 
-    public void setNumeroFactura(int numeroFactura) {
-        if (numeroFactura > 0) {
-            this.numeroFactura = numeroFactura;
-        }
-    }
-
-    public Date getFechaVenta() {
-        return fechaVenta;
+    public Date getFecha() {
+        return fecha;
     }
 
     public Cliente getCliente() {
         return cliente;
     }
 
-    public void setCliente(Cliente cliente) {
-        if (cliente != null) {
-            this.cliente = cliente;
-            calcularTotal(); // Recalcular con nuevo cliente
-        }
+    public double getSubtotal() {
+        return subtotal;
     }
 
-    public double getTotalVenta() {
-        return totalVenta;
+    public double getDescuento() {
+        return descuento;
+    }
+
+    public double getTotal() {
+        return total;
     }
 
     public String getMetodoPago() {
         return metodoPago;
     }
 
+    public boolean isFacturada() {
+        return facturada;
+    }
+
+    public ArrayList<Producto> getProductos() {
+        return new ArrayList<>(productos);
+    }
+
+    public int getCantidadTotalProductos() {
+        int total = 0;
+        for (Integer cantidad : cantidades) {
+            total += cantidad;
+        }
+        return total;
+    }
+
+    // SETTERS con validaciones
     public void setMetodoPago(String metodoPago) {
-        if (metodoPago.equals("efectivo") || metodoPago.equals("tarjeta") ||
-                metodoPago.equals("transferencia")) {
+        if (metodoPago != null && (metodoPago.equals("efectivo") ||
+                metodoPago.equals("tarjeta") ||
+                metodoPago.equals("transferencia"))) {
             this.metodoPago = metodoPago;
         }
     }
 
-    public ArrayList<Producto> getProductos() {
-        return new ArrayList<>(productos); // Devolver copia para proteger encapsulamiento
-    }
-
-    public int getCantidadProductos() {
-        return productos.size();
+    public void setFacturada(boolean facturada) {
+        this.facturada = facturada;
     }
 }
