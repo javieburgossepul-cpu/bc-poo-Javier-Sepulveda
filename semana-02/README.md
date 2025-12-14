@@ -11,7 +11,7 @@ En esta semana se crean dos clases del sistema de ferretería con sus respectivo
 ✅ Modelar objetos del mundo real en código Java
 
 ## 📂 Archivos entregados
-- `src/Producto.java` - Clase que representa un producto de ferretería con sus características básicas
-- `src/Categoria.java` - Clase relacionada con la clase Producto para clasificar los artículos
+- `src/src.co.edu.sena.semana01.Producto.java` - Clase que representa un Producto de ferretería con sus características básicas
+- `src/Categoria.java` - Clase relacionada con la clase src.co.edu.sena.semana01.Producto para clasificar los artículos
 - `src/Ferreteria.java` - Clase gestora de la ferretería que administra el inventario
-- `src/Main.java` - Programa de demostración del sistema completo
+- `src/src.co.edu.sena.semana01.Main.java` - Programa de demostración del sistema completo

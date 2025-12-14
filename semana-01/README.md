@@ -6,32 +6,32 @@ En esta semana se crean la clase principal y la clase secundaria de la ferreter�
 
 ## 🎯 Objetivos Cumplidos
 
-- [x] Implementar clase principal del dominio (Producto)
-- [x] Implementar clase secundaria relacionada (Proveedor)
+- [x] Implementar clase principal del dominio (src.co.edu.sena.semana01.Producto)
+- [x] Implementar clase secundaria relacionada (src.co.edu.sena.semana01.Proveedor)
 - [x] Crear programa de demostración funcional
 - [x] Documentar análisis del dominio ferretero
 - [x] Establecer relación entre objetos del negocio
 
 ## 📂 Archivos Entregados
 
-- `src/Producto.java` - Clase principal que representa los artículos de la ferretería
-- `src/Proveedor.java` - Clase secundaria que representa a los proveedores
-- `src/Main.java` - Programa de demostración que muestra el funcionamiento
+- `src/src.co.edu.sena.semana01.Producto.java` - Clase principal que representa los artículos de la ferretería
+- `src/src.co.edu.sena.semana01.Proveedor.java` - Clase secundaria que representa a los proveedores
+- `src/src.co.edu.sena.semana01.Main.java` - Programa de demostración que muestra el funcionamiento
 - `docs/ANALISIS.md` - Análisis completo del dominio ferretero
 
 ## 🛠️ Características Implementadas
 
-### Clase Producto (Principal)
+### Clase src.co.edu.sena.semana01.Producto (Principal)
 - **Atributos:** nombre, categoría, cantidad en stock, precio, disponibilidad
 - **Métodos:** impresión de información, cálculo de valor total, getters y setters
 - **Relación:** Representa el inventario de la ferretería
 
-### Clase Proveedor (Secundaria)
-- **Atributos:** nombre, contacto, producto principal, estado activo
+### Clase src.co.edu.sena.semana01.Proveedor (Secundaria)
+- **Atributos:** nombre, contacto, Producto principal, estado activo
 - **Métodos:** visualización de información, verificación de estado, acceso a datos
 - **Relación:** Suministra productos a la ferretería
 
-### Programa Main
+### Programa src.co.edu.sena.semana01.Main
 - Demostración con 2 productos y 2 proveedores
 - Llamada a todos los métodos implementados
 - Salida clara y organizada en consola
@@ -46,7 +46,7 @@ En esta semana se crean la clase principal y la clase secundaria de la ferreter�
 
 ## 📊 Resultados Esperados
 
-Al ejecutar el programa `Main.java`, se mostrará:
+Al ejecutar el programa `src.co.edu.sena.semana01.Main.java`, se mostrará:
 1. Información detallada de los productos
 2. Cálculo del valor total en inventario
 3. Información de los proveedores
@@ -55,8 +55,8 @@ Al ejecutar el programa `Main.java`, se mostrará:
 
 ## 🔗 Relaciones Establecidas
 
-- **Producto ←→ Proveedor:** Relación de suministro
-- **Cada producto** puede ser suministrado por uno o más proveedores
+- **src.co.edu.sena.semana01.Producto ←→ src.co.edu.sena.semana01.Proveedor:** Relación de suministro
+- **Cada Producto** puede ser suministrado por uno o más proveedores
 - **Cada proveedor** puede suministrar múltiples productos
 - La categorización permite organización por tipo de artículo
 

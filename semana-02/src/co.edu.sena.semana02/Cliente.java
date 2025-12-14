@@ -1,3 +1,5 @@
+package co.edu.sena.semana02;
+
 import java.util.ArrayList;
 
 public class Cliente {

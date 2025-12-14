@@ -1,3 +1,5 @@
+package co.edu.sena.semana02;
+
 public class Main {
     public static void main(String[] args) {
         System.out.println("=== SEMANA 2 - RELACIONES ENTRE OBJETOS ===\n");
