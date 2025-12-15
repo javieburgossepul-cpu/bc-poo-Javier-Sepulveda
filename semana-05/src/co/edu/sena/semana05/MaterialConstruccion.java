@@ -1,4 +1,6 @@
-package co.edu.sena.semana04;
+package co.edu.sena.semana05;
+
+import co.edu.sena.Producto;
 
 /**
  * Subclase 1: MaterialConstruccion

@@ -1,4 +1,4 @@
-package co.edu.sena.semana04;
+package co.edu.sena;
 
 /**
  * Subclase 2: Herramienta
